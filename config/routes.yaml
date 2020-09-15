@@ -1,0 +1,15 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+#app_lucky_number:
+#    path: /lucky/number
+#    controller: App\Controller\LuckyController::number
+_upload_data:
+    resource: "@UploadDataBundle/Controller/"
+    type:     annotation
+    prefix:   /uploads
+
+yosimitso_working_forum:
+    resource: "@YosimitsoWorkingForumBundle/Resources/config/routing.yml"
+    prefix:   /forum

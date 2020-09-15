@@ -1,0 +1,22 @@
+{
+  "name": "symfony5",
+  "version": "1.0.0",
+  "description": "proyecto para probar symfony5 y sus nuevas funcionalidades",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanrraider666/symfony5.git"
+  },
+  "author": "jdiaz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juanrraider666/symfony5/issues"
+  },
+  "homepage": "https://github.com/juanrraider666/symfony5#readme"
+}

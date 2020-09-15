@@ -1,0 +1,10 @@
+{
+    "name": "jdiaz/symfony5",
+    "authors": [
+        {
+            "name": "jdiaz",
+            "email": "jdiaz@optimeconsulting.com"
+        }
+    ],
+    "require": {}
+}
