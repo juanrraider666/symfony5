@@ -8,14 +8,10 @@ use App\Form\UploadFormType;
 use App\Security\FormLoginAuthenticator;
 use App\Services\ExcelReport;
 use App\Services\UploadManager;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -66,6 +62,7 @@ class RegistrationController extends AbstractController
      */
     public function uploadCSV(Request $request, UploadManager $manager)
     {
+
         $form = $this->createForm(UploadFormType::class, null, []);
 
         $form->handleRequest($request);
@@ -92,32 +89,31 @@ class RegistrationController extends AbstractController
     /**
      * @Route("download", name="download")
      * @param ExcelReport $excelReport
-     * @return StreamedResponse
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function download(ExcelReport  $excelReport)
     {
         $data = $this->getDoctrine()->getRepository(User::class)->findAll();
 
-//        dd($data);
-        $excel = [];
-        $contador =0;
-        foreach($data as $row){
+        if(count($data) != 0){
+            $excel = [];
+            $contador =0;
+            foreach($data as $row){
 
-            /** @var $row User */
-            $excel[$contador]['b1'] = $row->getNames();
-            $excel[$contador]['c1'] = $row->getGender();
+                /** @var $row User */
+                $excel[$contador]['b1'] = $row->getNames();
+                $excel[$contador]['c1'] = $row->getGender();
 
-            $contador++;
-        }
-        $keys = [
-            'b1'=> 'nombres',
-            'c1'=> 'genero',
-        ];
+                $contador++;
+            }
+            $keys = [
+                'b1'=> 'nombres',
+                'c1'=> 'genero',
+            ];
 
-        $response = [];
-        $response['data']=$excel;
-        $response['key']=$keys;
+            $response = [];
+            $response['data']=$excel;
+            $response['key']=$keys;
 
 
 //        $fileName = sprintf('%s %s.xlsx', 'My APs Status', date('dmy'));
@@ -127,46 +123,22 @@ class RegistrationController extends AbstractController
 //
 //        return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
 
-        try{
-            $writer = $excelReport->create($response['data'], $response['key'],'pruebita');
+            try{
+                $writer = $excelReport->create($response['data'], $response['key'],'Prueba de generos');
 
-        } catch (Exception $e) {
-        } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
-            $this->addFlash('error', $e->getMessage());
+            } catch (Exception $e) {
+            } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
+            $this->addFlash('success', 'subido con exito!');
+
+            // return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+            return $excelReport->createResponseFromWriter($writer, 'Prueba de generos');
         }
 
-
-       // return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
-        return $excelReport->createResponseFromWriter($writer, 'pruebita');
+        $this->addFlash('error', 'no hay datos a descargar!');
+        return  $this->redirectToRoute('upload_file');
 
     }
 
-
-//    /**
-//     * @param Xlsx $writer
-//     * @param $name
-//     * @param string $extension
-//     * @return StreamedResponse
-//     */
-//    public function createResponseFromWriter(Xlsx $writer, $name, $extension = 'xlsx')
-//    {
-//        // adding headers
-//        $response = new StreamedResponse(
-//            function () use ($writer) {
-//                $writer->save('php://output');
-//            }
-//        );
-//
-//        $dispositionHeader = $response->headers->makeDisposition(
-//            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-//            $name.'_'.date("dmy").'.'.$extension
-//        );
-//
-//
-//        $response->headers->set('Content-Type', 'application/vnd.ms-excel; charset=utf-8');
-//        $response->headers->set('Content-Disposition', $dispositionHeader);
-//        $response->headers->set('Cache-Control', 'max-age=0');
-//
-//        return $response;
-//    }
 }

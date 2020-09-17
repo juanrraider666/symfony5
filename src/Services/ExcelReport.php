@@ -85,7 +85,7 @@ class ExcelReport
     public function createHeaderStyle($headers, $name)
     {
 
-        //GENERAL STYLES HEADER AND ROWS
+        //AGREAGAMOS ESTILOS
         $lightGrey = [
             'font' => [
                 'bold' => true,
@@ -128,25 +128,26 @@ class ExcelReport
 
         //SHEET HEADINGS
         $date = new \DateTime('now');
-        $this->activeWorksheet->setCellValue('B2', 'Prueba de generos ');
+        $this->activeWorksheet->setCellValue('B2', 'Sistema Uninpahu');
         $this->activeWorksheet->setCellValue('B3', $name);
         $this->activeWorksheet->setCellValue('B4',  sprintf('%s: %s %s: %s',
-            'fecha',
+            'Fecha',
             $date->format('d-m-Y'),
-            'hora',
+            'Hora',
             $date->format('H:m:s')
         ));
+        //comenzamos desde el row 6 y col 2
         $this->firstRow = 6;
         $this->firstCol = 2;
 
-        //TABLE HEADINGS
+        //CABECERAS
         $i = $this->firstCol;
         $this->activeWorksheet->getRowDimension($this->firstRow)->setRowHeight(30);
         $this->activeWorksheet->setShowGridlines(false);
 
         foreach ($headers as $key => $value) {
 
-            //Dimensions
+            //DIMENSIONES
             $this->activeWorksheet->getColumnDimension(Coordinate::stringFromColumnIndex($i))->setAutoSize(true);
             $this->activeWorksheet->getStyle(Coordinate::stringFromColumnIndex($i))->getAlignment()->setHorizontal('center');
             $this->activeWorksheet->getStyle(Coordinate::stringFromColumnIndex($i) . $this->firstRow)->applyFromArray($tableHeading);

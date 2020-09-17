@@ -4,19 +4,43 @@
 {% block body %}
     <h1>Subir Archivo</h1>
 
+
+
     {{ form_start(uploadForm) }}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
     <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-        </div>
-        <div class="custom-file">
-            {{ form_widget(uploadForm.file, {'attr':{'class': 'custom-file-input', 'id':'inputGroupFile01', 'aria-describedby':'inputGroupFileAddon01'}}) }}
-            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-        </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+            </div>
+            <div class="custom-file">
+                {{ form_widget(uploadForm.file, {'attr':{
+                    'class': 'custom-file-input',
+                    'type':'file',
+                    'id':'inputGroupFile04',
+                    'aria-describedby':'inputGroupFileAddon04'
+                }}) }}
+                {{ form_label(uploadForm.file, null, { 'label_attr': {'class': 'custom-file-label', 'for': 'inputGroupFile04'}}) }}
+            </div>
+
     </div>
 
-    <button type="button" class="btn btn-outline-primary">Subir</button>
-    {{ form_end(uploadForm) }}
+
+
+
     <a class="btn btn-outline-warning" href="{{ path('download') }}">Descargar</a>
+    <button type="submit" class="btn btn-outline-primary">Subir</button>
+
+    {{ form_end(uploadForm) }}
 {% endblock %}
 

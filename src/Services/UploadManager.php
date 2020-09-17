@@ -28,6 +28,10 @@ class UploadManager
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param $file
+     * @return bool
+     */
     public function processUpload($file)
     {
 
